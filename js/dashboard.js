@@ -584,9 +584,14 @@ class AffiliateDashboard {
 let affiliateDashboard;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Verificar se é página de dashboard do afiliado
+  // Verificar se é página de dashboard do afiliado e se está logado como afiliado
   if (window.location.pathname.includes("dashboard.html")) {
-    affiliateDashboard = new AffiliateDashboard();
+    // Aguardar um pouco para garantir que a autenticação foi verificada
+    setTimeout(() => {
+      if (window.auth && window.auth.isAffiliate()) {
+        affiliateDashboard = new AffiliateDashboard();
+      }
+    }, 200);
   }
 });
 

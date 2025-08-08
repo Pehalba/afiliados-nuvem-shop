@@ -401,9 +401,13 @@ class TableSystem {
 // ===== INICIALIZAÇÃO =====
 let auth, navigation, modalSystem, tableSystem;
 
+// Tornar auth global
+window.auth = null;
+
 // Inicializar quando DOM estiver pronto
 document.addEventListener("DOMContentLoaded", () => {
   auth = new AuthSystem();
+  window.auth = auth; // Tornar global
   navigation = new Navigation();
   modalSystem = new ModalSystem();
   tableSystem = new TableSystem();
@@ -423,13 +427,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Se já está logado, redirecionar apenas uma vez
     if (auth.isLoggedIn() && !sessionStorage.getItem("redirected")) {
       sessionStorage.setItem("redirected", "true");
-      auth.redirectToDashboard();
+      setTimeout(() => {
+        auth.redirectToDashboard();
+      }, 100);
     }
   } else {
     // Se não está logado, redirecionar para login apenas uma vez
     if (!auth.isLoggedIn() && !sessionStorage.getItem("login_redirected")) {
       sessionStorage.setItem("login_redirected", "true");
-      window.location.href = "index.html";
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 100);
     } else if (auth.isLoggedIn()) {
       // Se está logado, limpar flag de redirecionamento para login
       sessionStorage.removeItem("login_redirected");

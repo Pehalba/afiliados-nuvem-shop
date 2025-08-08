@@ -681,9 +681,14 @@ class AdminPanel {
 let adminPanel;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Verificar se é página de admin
+  // Verificar se é página de admin e se está logado como admin
   if (window.location.pathname.includes("admin.html")) {
-    adminPanel = new AdminPanel();
+    // Aguardar um pouco para garantir que a autenticação foi verificada
+    setTimeout(() => {
+      if (window.auth && window.auth.isAdmin()) {
+        adminPanel = new AdminPanel();
+      }
+    }, 200);
   }
 });
 
