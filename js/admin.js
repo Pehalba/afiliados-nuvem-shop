@@ -18,9 +18,12 @@ class AdminPanel {
   }
 
   init() {
-    this.loadData();
-    this.setupEventListeners();
-    this.loadDashboard();
+    if (!this.initialized) {
+      this.initialized = true;
+      this.loadData();
+      this.setupEventListeners();
+      this.loadDashboard();
+    }
   }
 
   // Carregar dados
@@ -529,8 +532,11 @@ class AdminPanel {
 
   // Carregar dashboard
   loadDashboard() {
-    this.updateStats();
-    this.loadRecentActivity();
+    if (!this.dashboardLoaded) {
+      this.dashboardLoaded = true;
+      this.updateStats();
+      this.loadRecentActivity();
+    }
   }
 
   // Atualizar estatísticas
@@ -685,7 +691,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("admin.html")) {
     // Aguardar um pouco para garantir que a autenticação foi verificada
     setTimeout(() => {
-      if (window.auth && window.auth.isAdmin()) {
+      if (window.auth && window.auth.isAdmin() && !window.adminPanelInitialized) {
+        window.adminPanelInitialized = true;
         adminPanel = new AdminPanel();
       }
     }, 200);

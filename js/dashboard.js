@@ -19,9 +19,12 @@ class AffiliateDashboard {
   }
 
   init() {
-    this.loadUserData();
-    this.setupEventListeners();
-    this.loadDashboard();
+    if (!this.initialized) {
+      this.initialized = true;
+      this.loadUserData();
+      this.setupEventListeners();
+      this.loadDashboard();
+    }
   }
 
   // Carregar dados do usuário
@@ -85,10 +88,13 @@ class AffiliateDashboard {
 
   // Carregar dashboard
   loadDashboard() {
-    this.loadMyData();
-    this.updateStats();
-    this.loadCharts();
-    this.loadPerformanceData();
+    if (!this.dashboardLoaded) {
+      this.dashboardLoaded = true;
+      this.loadMyData();
+      this.updateStats();
+      this.loadCharts();
+      this.loadPerformanceData();
+    }
   }
 
   // Carregar dados pessoais
@@ -588,7 +594,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("dashboard.html")) {
     // Aguardar um pouco para garantir que a autenticação foi verificada
     setTimeout(() => {
-      if (window.auth && window.auth.isAffiliate()) {
+      if (window.auth && window.auth.isAffiliate() && !window.dashboardInitialized) {
+        window.dashboardInitialized = true;
         affiliateDashboard = new AffiliateDashboard();
       }
     }, 200);
