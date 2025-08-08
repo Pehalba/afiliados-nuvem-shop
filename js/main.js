@@ -27,7 +27,7 @@ class AuthSystem {
     const savedUser = this.getStoredUser();
     if (savedUser) {
       this.currentUser = savedUser;
-      this.redirectToDashboard();
+      // Não redirecionar automaticamente aqui - deixar o DOMContentLoaded fazer isso
     }
   }
 
