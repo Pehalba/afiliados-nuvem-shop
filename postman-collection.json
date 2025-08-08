@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "afiliados-nuvemshop",
+		"name": "Nuvemshop API - Afiliados",
+		"description": "Coleção para testar a API da Nuvemshop com a plataforma de afiliados",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Teste de Conexão",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/{{store_id}}/store",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{store_id}}",
+						"store"
+					]
+				},
+				"description": "Testa se a conexão com a API está funcionando"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Listar Cupons Existentes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/{{store_id}}/discount_coupons",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{store_id}}",
+						"discount_coupons"
+					]
+				},
+				"description": "Lista todos os cupons de desconto da loja"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Criar Novo Cupom",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"TESTE20\",\n  \"code\": \"TESTE20\",\n  \"value\": 20,\n  \"type\": \"percent\",\n  \"minimum_amount\": 50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/{{store_id}}/discount_coupons",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{store_id}}",
+						"discount_coupons"
+					]
+				},
+				"description": "Cria um novo cupom de desconto"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Listar Pedidos",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/{{store_id}}/orders",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{store_id}}",
+						"orders"
+					]
+				},
+				"description": "Lista todos os pedidos da loja"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Verificar Pedido Específico",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/{{store_id}}/orders/{{order_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{store_id}}",
+						"orders",
+						"{{order_id}}"
+					]
+				},
+				"description": "Verifica um pedido específico para ver se usou cupom de afiliado"
+			},
+			"response": []
+		},
+		{
+			"name": "6. Criar Cupom para Afiliado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"{{affiliate_code}}\",\n  \"code\": \"{{affiliate_code}}\",\n  \"value\": {{discount_value}},\n  \"type\": \"percent\",\n  \"minimum_amount\": {{minimum_amount}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/{{store_id}}/discount_coupons",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"{{store_id}}",
+						"discount_coupons"
+					]
+				},
+				"description": "Cria um cupom personalizado para um afiliado específico"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://api.nuvemshop.com.br/v1",
+			"type": "string"
+		},
+		{
+			"key": "store_id",
+			"value": "123456",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "seu_token_aqui",
+			"type": "string"
+		},
+		{
+			"key": "order_id",
+			"value": "789",
+			"type": "string"
+		},
+		{
+			"key": "affiliate_code",
+			"value": "JOAO10",
+			"type": "string"
+		},
+		{
+			"key": "discount_value",
+			"value": "10",
+			"type": "string"
+		},
+		{
+			"key": "minimum_amount",
+			"value": "50",
+			"type": "string"
+		}
+	]
+}
