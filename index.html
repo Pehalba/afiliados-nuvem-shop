@@ -3,68 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plataforma de Afiliados - Nuvemshop</title>
+    <title>Plataforma de Afiliados - Login</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="container">
-      <header class="header">
-        <h1>🎯 Plataforma de Afiliados</h1>
-        <p>Gerencie seus cupons e comissões da Nuvemshop</p>
-      </header>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-logo">🚀</div>
+        <h1 class="login-title">Plataforma de Afiliados</h1>
+        <p class="login-subtitle">Faça login para acessar sua conta</p>
 
-      <main class="main-content">
-        <div class="login-section">
-          <h2>Entrar no Sistema</h2>
+        <form id="loginForm" class="login-form">
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="seu@email.com"
+            />
+          </div>
 
-          <form id="loginForm" class="login-form">
-            <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="email" id="email" name="email" required />
-            </div>
+          <div class="form-row">
+            <label for="password">Senha</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="Sua senha"
+            />
+          </div>
 
-            <div class="form-group">
-              <label for="password">Senha:</label>
-              <input type="password" id="password" name="password" required />
-            </div>
+          <div class="form-row">
+            <label for="userType">Tipo de Usuário</label>
+            <select id="userType" name="userType" required>
+              <option value="">Selecione...</option>
+              <option value="admin">Administrador</option>
+              <option value="affiliate">Afiliado</option>
+            </select>
+          </div>
 
-            <div class="form-group">
-              <label for="userType">Tipo de Usuário:</label>
-              <select id="userType" name="userType" required>
-                <option value="">Selecione...</option>
-                <option value="admin">Administrador</option>
-                <option value="affiliate">Afiliado</option>
-              </select>
-            </div>
+          <button type="submit" class="login-btn">Entrar</button>
+        </form>
 
-            <button type="submit" class="btn btn-primary">Entrar</button>
-          </form>
-
-          <div class="demo-info">
-            <h3>💡 Demo - Dados de Teste</h3>
-            <p><strong>Admin:</strong> admin@teste.com / senha123</p>
-            <p><strong>Afiliado:</strong> joao@teste.com / senha123</p>
+        <div class="demo-credentials">
+          <h4>📋 Credenciais de Demonstração</h4>
+          <div class="credential-item">
+            <span class="credential-label">Admin:</span>
+            <span class="credential-value">admin@teste.com / senha123</span>
+          </div>
+          <div class="credential-item">
+            <span class="credential-label">Afiliado:</span>
+            <span class="credential-value">joao@teste.com / senha123</span>
           </div>
         </div>
-
-        <div class="features-section">
-          <h3>✨ Funcionalidades</h3>
-          <ul>
-            <li>✅ Criação automática de cupons de desconto</li>
-            <li>✅ Rastreamento de vendas por afiliado</li>
-            <li>✅ Cálculo automático de comissões</li>
-            <li>✅ Dashboard em tempo real</li>
-            <li>✅ Integração com API da Nuvemshop</li>
-          </ul>
-        </div>
-      </main>
-
-      <footer class="footer">
-        <p>&copy; 2024 Plataforma de Afiliados - Nuvemshop</p>
-      </footer>
+      </div>
     </div>
 
     <script src="js/main.js"></script>
-    <script src="js/tracking.js"></script>
   </body>
 </html>
