@@ -40,6 +40,9 @@ class AuthSystem {
           const user = this.getUserData(email, userType);
           this.currentUser = user;
           this.storeUser(user);
+          // Limpar flags de redirecionamento
+          sessionStorage.removeItem("redirected");
+          sessionStorage.removeItem("login_redirected");
           this.redirectToDashboard();
           resolve(user);
         } else {
@@ -92,6 +95,9 @@ class AuthSystem {
   logout() {
     this.currentUser = null;
     this.clearStoredUser();
+    // Limpar flags de redirecionamento
+    sessionStorage.removeItem("redirected");
+    sessionStorage.removeItem("login_redirected");
     window.location.href = "index.html";
   }
 
@@ -409,18 +415,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Verificar se está na página de login
-  if (
-    window.location.pathname.includes("index.html") ||
-    window.location.pathname === "/"
-  ) {
-    // Se já está logado, redirecionar
-    if (auth.isLoggedIn()) {
+  const isLoginPage = window.location.pathname.includes("index.html") || 
+                     window.location.pathname === "/" ||
+                     window.location.pathname.endsWith("/");
+  
+  if (isLoginPage) {
+    // Se já está logado, redirecionar apenas uma vez
+    if (auth.isLoggedIn() && !sessionStorage.getItem("redirected")) {
+      sessionStorage.setItem("redirected", "true");
       auth.redirectToDashboard();
     }
   } else {
-    // Se não está logado, redirecionar para login
-    if (!auth.isLoggedIn()) {
+    // Se não está logado, redirecionar para login apenas uma vez
+    if (!auth.isLoggedIn() && !sessionStorage.getItem("login_redirected")) {
+      sessionStorage.setItem("login_redirected", "true");
       window.location.href = "index.html";
+    } else if (auth.isLoggedIn()) {
+      // Se está logado, limpar flag de redirecionamento para login
+      sessionStorage.removeItem("login_redirected");
     }
   }
 });
