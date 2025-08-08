@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Administrativo - Afiliados</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>👨‍💼 Painel Administrativo</h1>
+        <nav class="nav">
+          <button id="btnDashboard" class="nav-btn active">Dashboard</button>
+          <button id="btnAfiliados" class="nav-btn">Afiliados</button>
+          <button id="btnCupons" class="nav-btn">Cupons</button>
+          <button id="btnVendas" class="nav-btn">Vendas</button>
+          <button id="btnConfig" class="nav-btn">Configurações</button>
+          <button id="btnLogout" class="nav-btn logout">Sair</button>
+        </nav>
+      </header>
+
+      <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboardSection" class="section active">
+          <h2>📊 Dashboard Geral</h2>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>Total de Afiliados</h3>
+              <p id="totalAfiliados" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Cupons Ativos</h3>
+              <p id="cuponsAtivos" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Vendas Hoje</h3>
+              <p id="vendasHoje" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Comissões Pendentes</h3>
+              <p id="comissoesPendentes" class="stat-number">R$ 0,00</p>
+            </div>
+          </div>
+
+          <div class="recent-activity">
+            <h3>🕒 Atividade Recente</h3>
+            <div id="activityList" class="activity-list">
+              <!-- Atividades serão carregadas dinamicamente -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Afiliados Section -->
+        <section id="afiliadosSection" class="section">
+          <h2>👥 Gestão de Afiliados</h2>
+
+          <div class="actions-bar">
+            <button id="btnAddAfiliado" class="btn btn-primary">
+              + Novo Afiliado
+            </button>
+            <button id="btnExportAfiliados" class="btn btn-secondary">
+              Exportar Lista
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="afiliadosTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Código</th>
+                  <th>Comissão (%)</th>
+                  <th>Status</th>
+                  <th>Vendas</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="afiliadosTableBody">
+                <!-- Dados serão carregados dinamicamente -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Cupons Section -->
+        <section id="cuponsSection" class="section">
+          <h2>🎫 Gestão de Cupons</h2>
+
+          <div class="actions-bar">
+            <button id="btnAddCupom" class="btn btn-primary">
+              + Novo Cupom
+            </button>
+            <button id="btnSyncCupons" class="btn btn-secondary">
+              Sincronizar com Nuvemshop
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="cuponsTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Afiliado</th>
+                  <th>Desconto</th>
+                  <th>Tipo</th>
+                  <th>Status</th>
+                  <th>Usos</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="cuponsTableBody">
+                <!-- Dados serão carregados dinamicamente -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Vendas Section -->
+        <section id="vendasSection" class="section">
+          <h2>💰 Relatório de Vendas</h2>
+
+          <div class="filters">
+            <input type="date" id="dataInicio" class="filter-input" />
+            <input type="date" id="dataFim" class="filter-input" />
+            <select id="afiliadoFilter" class="filter-input">
+              <option value="">Todos os Afiliados</option>
+            </select>
+            <button id="btnFiltrar" class="btn btn-secondary">Filtrar</button>
+          </div>
+
+          <div class="table-container">
+            <table id="vendasTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Cliente</th>
+                  <th>Afiliado</th>
+                  <th>Cupom</th>
+                  <th>Valor</th>
+                  <th>Comissão</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody id="vendasTableBody">
+                <!-- Dados serão carregados dinamicamente -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Configurações Section -->
+        <section id="configSection" class="section">
+          <h2>⚙️ Configurações da API</h2>
+
+          <form id="apiConfigForm" class="config-form">
+            <div class="form-group">
+              <label for="storeId">Store ID da Nuvemshop:</label>
+              <input
+                type="text"
+                id="storeId"
+                name="storeId"
+                placeholder="Ex: 123456"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="accessToken">Access Token:</label>
+              <input
+                type="password"
+                id="accessToken"
+                name="accessToken"
+                placeholder="Token da API"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="comissaoPadrao">Comissão Padrão (%):</label>
+              <input
+                type="number"
+                id="comissaoPadrao"
+                name="comissaoPadrao"
+                min="0"
+                max="100"
+                value="10"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              Salvar Configurações
+            </button>
+          </form>
+
+          <div class="api-status">
+            <h3>🔗 Status da API</h3>
+            <p id="apiStatus">Não configurado</p>
+            <button id="btnTestApi" class="btn btn-secondary">
+              Testar Conexão
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Afiliado -->
+    <div id="afiliadoModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle">Novo Afiliado</h2>
+        <form id="afiliadoForm">
+          <div class="form-group">
+            <label for="modalNome">Nome:</label>
+            <input type="text" id="modalNome" name="nome" required />
+          </div>
+          <div class="form-group">
+            <label for="modalEmail">Email:</label>
+            <input type="email" id="modalEmail" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="modalCodigo">Código do Afiliado:</label>
+            <input type="text" id="modalCodigo" name="codigo" required />
+          </div>
+          <div class="form-group">
+            <label for="modalComissao">Comissão (%):</label>
+            <input
+              type="number"
+              id="modalComissao"
+              name="comissao"
+              min="0"
+              max="100"
+              value="10"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>

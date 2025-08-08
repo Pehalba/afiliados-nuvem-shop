@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard do Afiliado</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>👤 Dashboard do Afiliado</h1>
+        <div class="user-info">
+          <span id="userName">Carregando...</span>
+          <button id="btnLogout" class="btn btn-small logout">Sair</button>
+        </div>
+        <nav class="nav">
+          <button id="btnOverview" class="nav-btn active">Visão Geral</button>
+          <button id="btnVendas" class="nav-btn">Minhas Vendas</button>
+          <button id="btnCupons" class="nav-btn">Meus Cupons</button>
+          <button id="btnComissoes" class="nav-btn">Comissões</button>
+          <button id="btnLinks" class="nav-btn">Links de Afiliado</button>
+        </nav>
+      </header>
+
+      <main class="main-content">
+        <!-- Overview Section -->
+        <section id="overviewSection" class="section active">
+          <h2>📊 Visão Geral</h2>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>Vendas do Mês</h3>
+              <p id="vendasMes" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Comissões Pendentes</h3>
+              <p id="comissoesPendentes" class="stat-number">R$ 0,00</p>
+            </div>
+            <div class="stat-card">
+              <h3>Cupons Ativos</h3>
+              <p id="cuponsAtivos" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Taxa de Conversão</h3>
+              <p id="taxaConversao" class="stat-number">0%</p>
+            </div>
+          </div>
+
+          <div class="charts-container">
+            <div class="chart-card">
+              <h3>📈 Vendas dos Últimos 7 Dias</h3>
+              <canvas id="vendasChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="chart-card">
+              <h3>🎯 Performance por Cupom</h3>
+              <div id="cuponsPerformance" class="performance-list">
+                <!-- Performance será carregada dinamicamente -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vendas Section -->
+        <section id="vendasSection" class="section">
+          <h2>💰 Minhas Vendas</h2>
+
+          <div class="filters">
+            <input type="date" id="dataInicio" class="filter-input" />
+            <input type="date" id="dataFim" class="filter-input" />
+            <select id="statusFilter" class="filter-input">
+              <option value="">Todos os Status</option>
+              <option value="paid">Pago</option>
+              <option value="pending">Pendente</option>
+              <option value="cancelled">Cancelado</option>
+            </select>
+            <button id="btnFiltrar" class="btn btn-secondary">Filtrar</button>
+          </div>
+
+          <div class="table-container">
+            <table id="vendasTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Cliente</th>
+                  <th>Cupom Usado</th>
+                  <th>Valor da Venda</th>
+                  <th>Minha Comissão</th>
+                  <th>Status</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody id="vendasTableBody">
+                <!-- Dados serão carregados dinamicamente -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Cupons Section -->
+        <section id="cuponsSection" class="section">
+          <h2>🎫 Meus Cupons</h2>
+
+          <div class="cupons-grid" id="cuponsGrid">
+            <!-- Cupons serão carregados dinamicamente -->
+          </div>
+
+          <div class="cupom-info">
+            <h3>💡 Como usar seus cupons</h3>
+            <p>
+              Compartilhe seus links de afiliado com os cupons para ganhar
+              comissões:
+            </p>
+            <ul>
+              <li>✅ Cada cupom tem um código único</li>
+              <li>✅ Clientes ganham desconto ao usar</li>
+              <li>✅ Você recebe comissão sobre a venda</li>
+              <li>✅ Rastreamento automático via API</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Comissões Section -->
+        <section id="comissoesSection" class="section">
+          <h2>💸 Minhas Comissões</h2>
+
+          <div class="comissoes-summary">
+            <div class="summary-card">
+              <h3>Total Ganho</h3>
+              <p id="totalGanho" class="amount">R$ 0,00</p>
+            </div>
+            <div class="summary-card">
+              <h3>Disponível para Saque</h3>
+              <p id="disponivelSaque" class="amount">R$ 0,00</p>
+            </div>
+            <div class="summary-card">
+              <h3>Próximo Pagamento</h3>
+              <p id="proximoPagamento" class="amount">R$ 0,00</p>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table id="comissoesTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Venda</th>
+                  <th>Valor da Venda</th>
+                  <th>Comissão (%)</th>
+                  <th>Valor da Comissão</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="comissoesTableBody">
+                <!-- Dados serão carregados dinamicamente -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Links Section -->
+        <section id="linksSection" class="section">
+          <h2>🔗 Links de Afiliado</h2>
+
+          <div class="links-container">
+            <div class="link-card">
+              <h3>Link Principal</h3>
+              <div class="link-display">
+                <input type="text" id="linkPrincipal" readonly />
+                <button
+                  class="btn btn-small"
+                  onclick="copyToClipboard('linkPrincipal')"
+                >
+                  Copiar
+                </button>
+              </div>
+              <p class="link-description">
+                Use este link para compartilhar em suas redes sociais
+              </p>
+            </div>
+
+            <div class="link-card">
+              <h3>Link com Cupom Específico</h3>
+              <div class="link-display">
+                <input type="text" id="linkCupom" readonly />
+                <button
+                  class="btn btn-small"
+                  onclick="copyToClipboard('linkCupom')"
+                >
+                  Copiar
+                </button>
+              </div>
+              <p class="link-description">
+                Link que aplica automaticamente seu cupom de desconto
+              </p>
+            </div>
+          </div>
+
+          <div class="qr-code-section">
+            <h3>📱 QR Code para WhatsApp</h3>
+            <div id="qrCodeContainer" class="qr-container">
+              <!-- QR Code será gerado dinamicamente -->
+            </div>
+            <p>Compartilhe este QR code para facilitar o acesso</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>

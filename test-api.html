@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teste de API - Nuvemshop</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .test-section {
+        background: white;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+      .test-result {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+      .test-success {
+        border-left: 4px solid #28a745;
+      }
+      .test-error {
+        border-left: 4px solid #dc3545;
+      }
+      .test-info {
+        border-left: 4px solid #17a2b8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🧪 Teste de API - Nuvemshop</h1>
+        <p>Página para testar a integração com a API da Nuvemshop</p>
+      </header>
+
+      <main class="main-content">
+        <!-- Configuração da API -->
+        <section class="test-section">
+          <h2>⚙️ Configuração da API</h2>
+          <form id="apiTestForm">
+            <div class="form-group">
+              <label for="storeId">Store ID:</label>
+              <input
+                type="text"
+                id="storeId"
+                name="storeId"
+                placeholder="Ex: 123456"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="accessToken">Access Token:</label>
+              <input
+                type="password"
+                id="accessToken"
+                name="accessToken"
+                placeholder="Seu token da API"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Testar Conexão
+            </button>
+          </form>
+        </section>
+
+        <!-- Teste de Cupons -->
+        <section class="test-section">
+          <h2>🎫 Teste de Cupons</h2>
+          <form id="couponTestForm">
+            <div class="form-group">
+              <label for="couponName">Nome do Cupom:</label>
+              <input
+                type="text"
+                id="couponName"
+                name="couponName"
+                value="TESTE10"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="couponCode">Código do Cupom:</label>
+              <input
+                type="text"
+                id="couponCode"
+                name="couponCode"
+                value="TESTE10"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="couponValue">Valor do Desconto (%):</label>
+              <input
+                type="number"
+                id="couponValue"
+                name="couponValue"
+                value="10"
+                min="1"
+                max="100"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Criar Cupom</button>
+          </form>
+        </section>
+
+        <!-- Teste de Pedidos -->
+        <section class="test-section">
+          <h2>📦 Teste de Pedidos</h2>
+          <button id="btnListOrders" class="btn btn-secondary">
+            Listar Pedidos
+          </button>
+          <button id="btnTestOrder" class="btn btn-secondary">
+            Testar Pedido Específico
+          </button>
+        </section>
+
+        <!-- Teste de Tracking -->
+        <section class="test-section">
+          <h2>🔗 Teste de Tracking</h2>
+          <div class="form-group">
+            <label for="affiliateCode">Código do Afiliado:</label>
+            <input
+              type="text"
+              id="affiliateCode"
+              name="affiliateCode"
+              value="JOAO10"
+            />
+          </div>
+          <button id="btnTestTracking" class="btn btn-secondary">
+            Testar Tracking
+          </button>
+          <button id="btnTestConversion" class="btn btn-secondary">
+            Simular Conversão
+          </button>
+        </section>
+
+        <!-- Resultados -->
+        <section class="test-section">
+          <h2>📊 Resultados dos Testes</h2>
+          <div id="testResults">
+            <div class="test-result test-info">
+              Clique nos botões acima para executar os testes...
+            </div>
+          </div>
+        </section>
+
+        <!-- Links de Teste -->
+        <section class="test-section">
+          <h2>🔗 Links de Teste</h2>
+          <p>Use estes links para testar o sistema de tracking:</p>
+          <ul>
+            <li>
+              <a href="?ref=JOAO10" target="_blank">Link com ref=JOAO10</a>
+            </li>
+            <li>
+              <a href="?affiliate=MARIA15" target="_blank"
+                >Link com affiliate=MARIA15</a
+              >
+            </li>
+            <li>
+              <a href="?ref=PEDRO20&cupom=PEDRO20" target="_blank"
+                >Link com ref e cupom</a
+              >
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/tracking.js"></script>
+    <script>
+      // Teste da API
+      document
+        .getElementById("apiTestForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const storeId = formData.get("storeId");
+          const accessToken = formData.get("accessToken");
+
+          addTestResult("info", "Testando conexão com a API...");
+
+          try {
+            // Salvar credenciais
+            localStorage.setItem("nuvemshop_store_id", storeId);
+            localStorage.setItem("nuvemshop_token", accessToken);
+
+            // Testar conexão
+            const response = await fetch(
+              `https://api.nuvemshop.com.br/v1/${storeId}/store`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (response.ok) {
+              const storeData = await response.json();
+              addTestResult(
+                "success",
+                `✅ Conexão bem-sucedida!\nLoja: ${storeData.name}\nDomínio: ${storeData.domain}`
+              );
+            } else {
+              addTestResult(
+                "error",
+                `❌ Erro na conexão: ${response.status} ${response.statusText}`
+              );
+            }
+          } catch (error) {
+            addTestResult("error", `❌ Erro: ${error.message}`);
+          }
+        });
+
+      // Teste de Cupons
+      document
+        .getElementById("couponTestForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const couponData = {
+            name: formData.get("couponName"),
+            code: formData.get("couponCode"),
+            value: parseInt(formData.get("couponValue")),
+            type: "percent",
+          };
+
+          addTestResult("info", "Criando cupom...");
+
+          try {
+            const response = await fetch(
+              `https://api.nuvemshop.com.br/v1/${localStorage.getItem(
+                "nuvemshop_store_id"
+              )}/discount_coupons`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem(
+                    "nuvemshop_token"
+                  )}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(couponData),
+              }
+            );
+
+            if (response.ok) {
+              const coupon = await response.json();
+              addTestResult(
+                "success",
+                `✅ Cupom criado com sucesso!\nCódigo: ${coupon.code}\nDesconto: ${coupon.value}%\nID: ${coupon.id}`
+              );
+            } else {
+              const error = await response.json();
+              addTestResult(
+                "error",
+                `❌ Erro ao criar cupom: ${
+                  error.message || response.statusText
+                }`
+              );
+            }
+          } catch (error) {
+            addTestResult("error", `❌ Erro: ${error.message}`);
+          }
+        });
+
+      // Teste de Pedidos
+      document
+        .getElementById("btnListOrders")
+        .addEventListener("click", async () => {
+          addTestResult("info", "Listando pedidos...");
+
+          try {
+            const response = await fetch(
+              `https://api.nuvemshop.com.br/v1/${localStorage.getItem(
+                "nuvemshop_store_id"
+              )}/orders?limit=5`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem(
+                    "nuvemshop_token"
+                  )}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (response.ok) {
+              const orders = await response.json();
+              addTestResult(
+                "success",
+                `✅ ${orders.length} pedidos encontrados:\n${orders
+                  .map(
+                    (order) =>
+                      `#${order.number} - ${order.total} - ${order.status}`
+                  )
+                  .join("\n")}`
+              );
+            } else {
+              addTestResult(
+                "error",
+                `❌ Erro ao listar pedidos: ${response.statusText}`
+              );
+            }
+          } catch (error) {
+            addTestResult("error", `❌ Erro: ${error.message}`);
+          }
+        });
+
+      // Teste de Tracking
+      document
+        .getElementById("btnTestTracking")
+        .addEventListener("click", () => {
+          const affiliateCode = document.getElementById("affiliateCode").value;
+
+          // Simular tracking
+          if (trackingSystem) {
+            trackingSystem.setAffiliate(affiliateCode);
+            addTestResult(
+              "success",
+              `✅ Tracking configurado para: ${affiliateCode}\nCookie salvo: afiliado_ref=${affiliateCode}`
+            );
+          } else {
+            addTestResult("error", "❌ Sistema de tracking não inicializado");
+          }
+        });
+
+      // Teste de Conversão
+      document
+        .getElementById("btnTestConversion")
+        .addEventListener("click", () => {
+          const affiliateCode = document.getElementById("affiliateCode").value;
+
+          // Simular conversão
+          const conversionData = {
+            affiliate_code: affiliateCode,
+            order_id: "TEST_" + Date.now(),
+            order_value: 150.0,
+            timestamp: new Date().toISOString(),
+            event_type: "conversion",
+          };
+
+          addTestResult(
+            "success",
+            `💰 Conversão simulada:\n${JSON.stringify(conversionData, null, 2)}`
+          );
+        });
+
+      // Função para adicionar resultados
+      function addTestResult(type, message) {
+        const resultsDiv = document.getElementById("testResults");
+        const resultDiv = document.createElement("div");
+        resultDiv.className = `test-result test-${type}`;
+        resultDiv.textContent = message;
+        resultsDiv.appendChild(resultDiv);
+
+        // Scroll para o resultado
+        resultDiv.scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Verificar se há credenciais salvas
+      window.addEventListener("load", () => {
+        const storeId = localStorage.getItem("nuvemshop_store_id");
+        const token = localStorage.getItem("nuvemshop_token");
+
+        if (storeId && token) {
+          document.getElementById("storeId").value = storeId;
+          document.getElementById("accessToken").value = token;
+          addTestResult("info", "🔑 Credenciais carregadas do localStorage");
+        }
+      });
+    </script>
+  </body>
+</html>

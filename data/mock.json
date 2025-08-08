@@ -1,0 +1,198 @@
+{
+  "affiliates": [
+    {
+      "id": 1,
+      "name": "João Silva",
+      "email": "joao@teste.com",
+      "code": "JOAO10",
+      "commission": 10,
+      "status": "active",
+      "sales": 15,
+      "totalEarnings": 150.0,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "avatar": "👤"
+    },
+    {
+      "id": 2,
+      "name": "Maria Santos",
+      "email": "maria@teste.com",
+      "code": "MARIA15",
+      "commission": 15,
+      "status": "active",
+      "sales": 8,
+      "totalEarnings": 120.0,
+      "createdAt": "2024-01-05T00:00:00Z",
+      "avatar": "👤"
+    },
+    {
+      "id": 3,
+      "name": "Pedro Costa",
+      "email": "pedro@teste.com",
+      "code": "PEDRO20",
+      "commission": 20,
+      "status": "inactive",
+      "sales": 3,
+      "totalEarnings": 60.0,
+      "createdAt": "2024-01-10T00:00:00Z",
+      "avatar": "👤"
+    }
+  ],
+  "coupons": [
+    {
+      "id": "coupon_001",
+      "name": "JOAO10 - Cupom de Afiliado",
+      "code": "JOAO10",
+      "value": 10,
+      "type": "percent",
+      "affiliate_code": "JOAO10",
+      "usage_count": 15,
+      "created_at": "2024-01-01T00:00:00Z",
+      "status": "active"
+    },
+    {
+      "id": "coupon_002",
+      "name": "MARIA15 - Cupom de Afiliado",
+      "code": "MARIA15",
+      "value": 15,
+      "type": "percent",
+      "affiliate_code": "MARIA15",
+      "usage_count": 8,
+      "created_at": "2024-01-05T00:00:00Z",
+      "status": "active"
+    },
+    {
+      "id": "coupon_003",
+      "name": "PEDRO20 - Cupom de Afiliado",
+      "code": "PEDRO20",
+      "value": 20,
+      "type": "percent",
+      "affiliate_code": "PEDRO20",
+      "usage_count": 3,
+      "created_at": "2024-01-10T00:00:00Z",
+      "status": "inactive"
+    }
+  ],
+  "sales": [
+    {
+      "id": 1001,
+      "orderNumber": "1001",
+      "customer": "João Silva",
+      "affiliate": "JOAO10",
+      "coupon": "JOAO10",
+      "value": 150.0,
+      "commission": 15.0,
+      "date": "2024-01-15T10:30:00Z",
+      "status": "paid"
+    },
+    {
+      "id": 1002,
+      "orderNumber": "1002",
+      "customer": "Maria Santos",
+      "affiliate": "MARIA15",
+      "coupon": "MARIA15",
+      "value": 200.0,
+      "commission": 30.0,
+      "date": "2024-01-16T14:20:00Z",
+      "status": "paid"
+    },
+    {
+      "id": 1003,
+      "orderNumber": "1003",
+      "customer": "Ana Costa",
+      "affiliate": "JOAO10",
+      "coupon": "JOAO10",
+      "value": 80.0,
+      "commission": 8.0,
+      "date": "2024-01-17T09:15:00Z",
+      "status": "paid"
+    },
+    {
+      "id": 1004,
+      "orderNumber": "1004",
+      "customer": "Carlos Lima",
+      "affiliate": "MARIA15",
+      "coupon": "MARIA15",
+      "value": 120.0,
+      "commission": 18.0,
+      "date": "2024-01-18T16:45:00Z",
+      "status": "pending"
+    },
+    {
+      "id": 1005,
+      "orderNumber": "1005",
+      "customer": "Pedro Costa",
+      "affiliate": "PEDRO20",
+      "coupon": "PEDRO20",
+      "value": 300.0,
+      "commission": 60.0,
+      "date": "2024-01-19T11:30:00Z",
+      "status": "paid"
+    }
+  ],
+  "tracking_data": [
+    {
+      "affiliate_code": "JOAO10",
+      "product_url": "https://sua-loja.nuvemshop.com.br/produtos/camiseta-basica",
+      "timestamp": "2024-01-15T10:25:00Z",
+      "event_type": "product_click"
+    },
+    {
+      "affiliate_code": "JOAO10",
+      "timestamp": "2024-01-15T10:28:00Z",
+      "event_type": "checkout_start"
+    },
+    {
+      "affiliate_code": "JOAO10",
+      "order_id": "1001",
+      "order_value": 150.0,
+      "timestamp": "2024-01-15T10:35:00Z",
+      "event_type": "conversion"
+    },
+    {
+      "affiliate_code": "MARIA15",
+      "product_url": "https://sua-loja.nuvemshop.com.br/produtos/calca-jeans",
+      "timestamp": "2024-01-16T14:15:00Z",
+      "event_type": "product_click"
+    },
+    {
+      "affiliate_code": "MARIA15",
+      "timestamp": "2024-01-16T14:18:00Z",
+      "event_type": "checkout_start"
+    },
+    {
+      "affiliate_code": "MARIA15",
+      "order_id": "1002",
+      "order_value": 200.0,
+      "timestamp": "2024-01-16T14:25:00Z",
+      "event_type": "conversion"
+    }
+  ],
+  "api_config": {
+    "store_id": "123456",
+    "access_token": "demo_token_123456",
+    "comissao_padrao": 10,
+    "store_url": "https://sua-loja.nuvemshop.com.br"
+  },
+  "demo_users": {
+    "admin": {
+      "email": "admin@teste.com",
+      "password": "senha123",
+      "type": "admin",
+      "name": "Administrador"
+    },
+    "affiliate": {
+      "email": "joao@teste.com",
+      "password": "senha123",
+      "type": "affiliate",
+      "name": "João Silva",
+      "affiliateCode": "JOAO10",
+      "commission": 10
+    }
+  },
+  "store_info": {
+    "name": "Loja Demo - Afiliados",
+    "domain": "sua-loja.nuvemshop.com.br",
+    "currency": "BRL",
+    "timezone": "America/Sao_Paulo"
+  }
+}
