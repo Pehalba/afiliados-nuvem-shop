@@ -406,45 +406,74 @@ window.auth = null;
 
   // Inicializar quando DOM estiver pronto
   document.addEventListener("DOMContentLoaded", () => {
-    auth = new AuthSystem();
-    window.auth = auth; // Tornar global
+    console.log("🚀 DOMContentLoaded iniciado");
     
-    // Inicializar sistemas apenas se necessário
-    const isLoginPage = window.location.pathname.includes("index.html") || 
-                       window.location.pathname === "/" ||
-                       window.location.pathname.endsWith("/");
+    // Inicializar apenas autenticação
+    auth = new AuthSystem();
+    window.auth = auth;
+    
+    console.log("✅ AuthSystem inicializado");
+    
+    // Verificar página atual
+    const currentPath = window.location.pathname;
+    const isLoginPage = currentPath.includes("index.html") || 
+                       currentPath === "/" ||
+                       currentPath.endsWith("/");
+    
+    console.log(`📍 Página atual: ${currentPath}`);
+    console.log(`🔐 É página de login: ${isLoginPage}`);
     
     if (isLoginPage) {
-      // Na página de login, inicializar apenas o necessário
+      console.log("📝 Configurando página de login");
+      
+      // Configurar formulário de login
       const loginForm = document.getElementById("loginForm");
       if (loginForm) {
         loginForm.addEventListener("submit", handleLogin);
+        console.log("✅ Formulário de login configurado");
       }
       
-      // Se já está logado, redirecionar apenas uma vez
-      if (auth.isLoggedIn() && !sessionStorage.getItem("redirected")) {
-        sessionStorage.setItem("redirected", "true");
-        setTimeout(() => {
-          auth.redirectToDashboard();
-        }, 100);
+      // Verificar se já está logado
+      if (auth.isLoggedIn()) {
+        console.log("👤 Usuário já logado, verificando redirecionamento");
+        if (!sessionStorage.getItem("redirected")) {
+          console.log("🔄 Redirecionando para dashboard");
+          sessionStorage.setItem("redirected", "true");
+          setTimeout(() => {
+            auth.redirectToDashboard();
+          }, 100);
+        } else {
+          console.log("⚠️ Já foi redirecionado, ignorando");
+        }
       }
     } else {
-      // Nas páginas do sistema, inicializar navegação e outros sistemas
-      navigation = new Navigation();
-      modalSystem = new ModalSystem();
-      tableSystem = new TableSystem();
+      console.log("🏢 Configurando página do sistema");
       
-      // Se não está logado, redirecionar para login apenas uma vez
-      if (!auth.isLoggedIn() && !sessionStorage.getItem("login_redirected")) {
-        sessionStorage.setItem("login_redirected", "true");
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 100);
-      } else if (auth.isLoggedIn()) {
-        // Se está logado, limpar flag de redirecionamento para login
+      // Verificar se está logado
+      if (!auth.isLoggedIn()) {
+        console.log("❌ Usuário não logado, redirecionando para login");
+        if (!sessionStorage.getItem("login_redirected")) {
+          sessionStorage.setItem("login_redirected", "true");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 100);
+        }
+      } else {
+        console.log("✅ Usuário logado, inicializando sistemas");
         sessionStorage.removeItem("login_redirected");
+        
+        // Inicializar sistemas apenas se necessário
+        if (!window.systemsInitialized) {
+          window.systemsInitialized = true;
+          navigation = new Navigation();
+          modalSystem = new ModalSystem();
+          tableSystem = new TableSystem();
+          console.log("✅ Sistemas inicializados");
+        }
       }
     }
+    
+    console.log("🏁 DOMContentLoaded concluído");
   });
 
 // ===== HANDLERS =====

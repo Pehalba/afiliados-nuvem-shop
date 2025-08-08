@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Loop Problem</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-info { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug - Problema do Loop</h1>
+    
+    <div class="debug-info">
+        <h3>📊 Informações de Debug</h3>
+        <div id="debugOutput"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>🎯 Testes</h3>
+        <button onclick="testAuth()">Testar Autenticação</button>
+        <button onclick="testNavigation()">Testar Navegação</button>
+        <button onclick="clearStorage()">Limpar Storage</button>
+        <button onclick="testLogin()">Simular Login</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>📝 Logs</h3>
+        <div id="logOutput"></div>
+    </div>
+
+    <script>
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const logOutput = document.getElementById('logOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `<strong>${timestamp}:</strong> ${message}`;
+            logOutput.appendChild(logEntry);
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        // Função para adicionar debug info
+        function addDebugInfo(info) {
+            const debugOutput = document.getElementById('debugOutput');
+            const infoEntry = document.createElement('div');
+            infoEntry.innerHTML = info;
+            debugOutput.appendChild(infoEntry);
+        }
+
+        // Testar autenticação
+        function testAuth() {
+            addLog('Testando autenticação...', 'info');
+            
+            const storedUser = localStorage.getItem('afiliados_platform_user');
+            addDebugInfo(`<strong>Usuário armazenado:</strong> ${storedUser || 'Nenhum'}`);
+            
+            if (window.auth) {
+                addLog('AuthSystem encontrado', 'success');
+                addDebugInfo(`<strong>Logado:</strong> ${window.auth.isLoggedIn()}`);
+                addDebugInfo(`<strong>É Admin:</strong> ${window.auth.isAdmin()}`);
+                addDebugInfo(`<strong>É Afiliado:</strong> ${window.auth.isAffiliate()}`);
+            } else {
+                addLog('AuthSystem NÃO encontrado', 'error');
+            }
+        }
+
+        // Testar navegação
+        function testNavigation() {
+            addLog('Testando navegação...', 'info');
+            
+            const currentPath = window.location.pathname;
+            addDebugInfo(`<strong>Página atual:</strong> ${currentPath}`);
+            
+            const isLoginPage = currentPath.includes("index.html") || 
+                               currentPath === "/" ||
+                               currentPath.endsWith("/");
+            addDebugInfo(`<strong>É página de login:</strong> ${isLoginPage}`);
+            
+            const redirected = sessionStorage.getItem("redirected");
+            const loginRedirected = sessionStorage.getItem("login_redirected");
+            addDebugInfo(`<strong>Flag redirected:</strong> ${redirected}`);
+            addDebugInfo(`<strong>Flag login_redirected:</strong> ${loginRedirected}`);
+        }
+
+        // Limpar storage
+        function clearStorage() {
+            addLog('Limpando storage...', 'info');
+            sessionStorage.clear();
+            localStorage.removeItem('afiliados_platform_user');
+            addLog('Storage limpo!', 'success');
+        }
+
+        // Simular login
+        function testLogin() {
+            addLog('Simulando login...', 'info');
+            
+            const testUser = {
+                id: 1,
+                name: "Teste Admin",
+                email: "admin@teste.com",
+                type: "admin"
+            };
+            
+            localStorage.setItem('afiliados_platform_user', JSON.stringify(testUser));
+            addLog('Login simulado!', 'success');
+        }
+
+        // Monitorar mudanças no DOM
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    addLog(`DOM alterado: ${mutation.addedNodes.length} nós adicionados, ${mutation.removedNodes.length} removidos`, 'info');
+                }
+            });
+        });
+
+        // Iniciar observação
+        document.addEventListener('DOMContentLoaded', () => {
+            addLog('DOM carregado', 'success');
+            
+            // Observar mudanças no body
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            // Verificar scripts carregados
+            const scripts = document.querySelectorAll('script');
+            addDebugInfo(`<strong>Scripts carregados:</strong> ${scripts.length}`);
+            scripts.forEach((script, index) => {
+                addDebugInfo(`<strong>Script ${index + 1}:</strong> ${script.src || 'inline'}`);
+            });
+        });
+
+        // Monitorar erros
+        window.addEventListener('error', (e) => {
+            addLog(`Erro: ${e.message} em ${e.filename}:${e.lineno}`, 'error');
+        });
+
+        // Monitorar mudanças de URL
+        let lastUrl = window.location.href;
+        setInterval(() => {
+            if (window.location.href !== lastUrl) {
+                addLog(`URL mudou: ${lastUrl} → ${window.location.href}`, 'info');
+                lastUrl = window.location.href;
+            }
+        }, 1000);
+
+        // Adicionar informações iniciais
+        addDebugInfo(`<strong>URL atual:</strong> ${window.location.href}`);
+        addDebugInfo(`<strong>User Agent:</strong> ${navigator.userAgent}`);
+        addDebugInfo(`<strong>Timestamp:</strong> ${new Date().toISOString()}`);
+    </script>
+
+    <!-- Carregar scripts da plataforma -->
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
