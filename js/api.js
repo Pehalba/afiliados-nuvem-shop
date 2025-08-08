@@ -10,16 +10,11 @@
 
 // ===== CONFIGURAÇÕES DA API =====
 const API_CONFIG = {
-  BASE_URL: "https://api.nuvemshop.com.br/v1",
   ENDPOINTS: {
     DISCOUNT_COUPONS: "/discount_coupons",
     ORDERS: "/orders",
     PRODUCTS: "/products",
     STORE: "/store",
-  },
-  HEADERS: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
   },
 };
 
@@ -38,8 +33,9 @@ class NuvemshopAPI {
 
   // Carregar credenciais salvas
   loadCredentials() {
-    this.storeId = localStorage.getItem("nuvemshop_store_id");
-    this.accessToken = localStorage.getItem("nuvemshop_token");
+    // Usar configurações centralizadas
+    this.storeId = NUVERMSHOP_CONFIG.STORE_ID;
+    this.accessToken = NUVERMSHOP_CONFIG.ACCESS_TOKEN;
   }
 
   // Salvar credenciais
@@ -47,8 +43,10 @@ class NuvemshopAPI {
     this.storeId = storeId;
     this.accessToken = accessToken;
 
-    localStorage.setItem("nuvemshop_store_id", storeId);
-    localStorage.setItem("nuvemshop_token", accessToken);
+    // Atualizar configurações centralizadas
+    NUVERMSHOP_CONFIG.STORE_ID = storeId;
+    NUVERMSHOP_CONFIG.ACCESS_TOKEN = accessToken;
+    saveConfig(NUVERMSHOP_CONFIG);
   }
 
   // Verificar se API está configurada
@@ -374,11 +372,8 @@ class NuvemshopAPI {
       throw new Error("API não configurada");
     }
 
-    const url = `${API_CONFIG.BASE_URL}/${this.storeId}${endpoint}`;
-    const headers = {
-      ...API_CONFIG.HEADERS,
-      Authorization: `Bearer ${this.accessToken}`,
-    };
+    const url = getApiUrl(endpoint);
+    const headers = getApiHeaders();
 
     const options = {
       method,

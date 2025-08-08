@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teste de Integração - API Nuvemshop</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .test-section {
+        background: white;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+      .test-result {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        font-family: monospace;
+        white-space: pre-wrap;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .test-success {
+        border-left: 4px solid #28a745;
+      }
+      .test-error {
+        border-left: 4px solid #dc3545;
+      }
+      .test-info {
+        border-left: 4px solid #17a2b8;
+      }
+      .status-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+      .status-connected {
+        background-color: #28a745;
+      }
+      .status-disconnected {
+        background-color: #dc3545;
+      }
+      .status-loading {
+        background-color: #ffc107;
+        animation: pulse 1s infinite;
+      }
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🧪 Teste de Integração - API Nuvemshop</h1>
+        <p>Verifique se a integração com a API está funcionando corretamente</p>
+      </header>
+
+      <main class="main-content">
+        <!-- Status da API -->
+        <section class="test-section">
+          <h2>📊 Status da API</h2>
+          <div class="d-flex align-items-center mb-3">
+            <span class="status-indicator" id="apiStatusIndicator"></span>
+            <span id="apiStatusText">Verificando...</span>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" onclick="testApiConnection()">
+              Testar Conexão
+            </button>
+            <button class="btn btn-secondary" onclick="showApiConfig()">
+              Ver Configurações
+            </button>
+          </div>
+        </section>
+
+        <!-- Teste de Cupons -->
+        <section class="test-section">
+          <h2>🎫 Teste de Cupons</h2>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" onclick="listCoupons()">
+              Listar Cupons
+            </button>
+            <button class="btn btn-success" onclick="createTestCoupon()">
+              Criar Cupom de Teste
+            </button>
+            <button class="btn btn-warning" onclick="deleteTestCoupons()">
+              Limpar Cupons de Teste
+            </button>
+          </div>
+          <div id="couponsResult" class="test-result" style="display: none;"></div>
+        </section>
+
+        <!-- Teste de Pedidos -->
+        <section class="test-section">
+          <h2>📦 Teste de Pedidos</h2>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" onclick="listOrders()">
+              Listar Pedidos
+            </button>
+            <button class="btn btn-info" onclick="getRecentOrders()">
+              Pedidos Recentes
+            </button>
+          </div>
+          <div id="ordersResult" class="test-result" style="display: none;"></div>
+        </section>
+
+        <!-- Teste de Produtos -->
+        <section class="test-section">
+          <h2>🛍️ Teste de Produtos</h2>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" onclick="listProducts()">
+              Listar Produtos
+            </button>
+            <button class="btn btn-info" onclick="getProductCount()">
+              Contar Produtos
+            </button>
+          </div>
+          <div id="productsResult" class="test-result" style="display: none;"></div>
+        </section>
+
+        <!-- Informações da Loja -->
+        <section class="test-section">
+          <h2>🏪 Informações da Loja</h2>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" onclick="getStoreInfo()">
+              Obter Informações
+            </button>
+          </div>
+          <div id="storeResult" class="test-result" style="display: none;"></div>
+        </section>
+
+        <!-- Log de Testes -->
+        <section class="test-section">
+          <h2>📝 Log de Testes</h2>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-secondary" onclick="clearLog()">
+              Limpar Log
+            </button>
+            <button class="btn btn-info" onclick="exportLog()">
+              Exportar Log
+            </button>
+          </div>
+          <div id="testLog" class="test-result test-info"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+      // Variáveis globais
+      let testLog = [];
+
+      // Função para adicionar log
+      function addLog(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = `[${timestamp}] ${message}`;
+        testLog.push({ message: logEntry, type });
+        
+        const logElement = document.getElementById('testLog');
+        logElement.textContent = testLog.map(entry => entry.message).join('\n');
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+
+      // Função para mostrar resultado
+      function showResult(elementId, data, type = 'info') {
+        const element = document.getElementById(elementId);
+        element.style.display = 'block';
+        element.className = `test-result test-${type}`;
+        element.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+      }
+
+      // Função para atualizar status da API
+      function updateApiStatus(connected, message = '') {
+        const indicator = document.getElementById('apiStatusIndicator');
+        const text = document.getElementById('apiStatusText');
+        
+        if (connected) {
+          indicator.className = 'status-indicator status-connected';
+          text.textContent = `Conectado${message ? ` - ${message}` : ''}`;
+        } else {
+          indicator.className = 'status-indicator status-disconnected';
+          text.textContent = `Desconectado${message ? ` - ${message}` : ''}`;
+        }
+      }
+
+      // Testar conexão com a API
+      async function testApiConnection() {
+        try {
+          updateApiStatus(false, 'Testando...');
+          addLog('Testando conexão com a API...');
+          
+          if (!isApiConfigured()) {
+            throw new Error('API não configurada');
+          }
+
+          const response = await fetch(getApiUrl('/store'), {
+            headers: getApiHeaders()
+          });
+
+          if (response.ok) {
+            const storeData = await response.json();
+            updateApiStatus(true, storeData.name);
+            addLog(`✅ Conexão bem-sucedida! Loja: ${storeData.name}`);
+            showResult('storeResult', storeData, 'success');
+          } else {
+            throw new Error(`Erro ${response.status}: ${response.statusText}`);
+          }
+        } catch (error) {
+          updateApiStatus(false, error.message);
+          addLog(`❌ Erro na conexão: ${error.message}`);
+        }
+      }
+
+      // Listar cupons
+      async function listCoupons() {
+        try {
+          addLog('Listando cupons...');
+          const coupons = await nuvemshopAPI.listDiscountCoupons();
+          addLog(`✅ Encontrados ${coupons.length} cupons`);
+          showResult('couponsResult', coupons, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao listar cupons: ${error.message}`);
+          showResult('couponsResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Criar cupom de teste
+      async function createTestCoupon() {
+        try {
+          const testCode = `TESTE${Date.now()}`;
+          addLog(`Criando cupom de teste: ${testCode}`);
+          
+          const couponData = {
+            name: testCode,
+            code: testCode,
+            value: 10,
+            type: 'percent',
+            minimum_amount: 50
+          };
+
+          const coupon = await nuvemshopAPI.createDiscountCoupon(couponData);
+          addLog(`✅ Cupom criado com sucesso: ${coupon.code}`);
+          showResult('couponsResult', coupon, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao criar cupom: ${error.message}`);
+          showResult('couponsResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Deletar cupons de teste
+      async function deleteTestCoupons() {
+        try {
+          addLog('Buscando cupons de teste...');
+          const coupons = await nuvemshopAPI.listDiscountCoupons();
+          const testCoupons = coupons.filter(c => c.code.startsWith('TESTE'));
+          
+          addLog(`Encontrados ${testCoupons.length} cupons de teste`);
+          
+          for (const coupon of testCoupons) {
+            try {
+              await nuvemshopAPI.deleteDiscountCoupon(coupon.id);
+              addLog(`✅ Cupom deletado: ${coupon.code}`);
+            } catch (error) {
+              addLog(`❌ Erro ao deletar cupom ${coupon.code}: ${error.message}`);
+            }
+          }
+          
+          showResult('couponsResult', `Deletados ${testCoupons.length} cupons de teste`, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao deletar cupons: ${error.message}`);
+          showResult('couponsResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Listar pedidos
+      async function listOrders() {
+        try {
+          addLog('Listando pedidos...');
+          const orders = await nuvemshopAPI.listOrders({ limit: 10 });
+          addLog(`✅ Encontrados ${orders.length} pedidos`);
+          showResult('ordersResult', orders, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao listar pedidos: ${error.message}`);
+          showResult('ordersResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Obter pedidos recentes
+      async function getRecentOrders() {
+        try {
+          addLog('Buscando pedidos recentes...');
+          const orders = await nuvemshopAPI.listOrders({ 
+            limit: 5,
+            status: 'paid'
+          });
+          addLog(`✅ Encontrados ${orders.length} pedidos pagos`);
+          showResult('ordersResult', orders, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao buscar pedidos: ${error.message}`);
+          showResult('ordersResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Listar produtos
+      async function listProducts() {
+        try {
+          addLog('Listando produtos...');
+          const products = await nuvemshopAPI.listProducts({ limit: 10 });
+          addLog(`✅ Encontrados ${products.length} produtos`);
+          showResult('productsResult', products, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao listar produtos: ${error.message}`);
+          showResult('productsResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Contar produtos
+      async function getProductCount() {
+        try {
+          addLog('Contando produtos...');
+          const products = await nuvemshopAPI.listProducts({ limit: 100 });
+          addLog(`✅ Total de produtos: ${products.length}`);
+          showResult('productsResult', { total: products.length, products: products.slice(0, 5) }, 'success');
+        } catch (error) {
+          addLog(`❌ Erro ao contar produtos: ${error.message}`);
+          showResult('productsResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Obter informações da loja
+      async function getStoreInfo() {
+        try {
+          addLog('Obtendo informações da loja...');
+          const response = await fetch(getApiUrl('/store'), {
+            headers: getApiHeaders()
+          });
+          
+          if (response.ok) {
+            const storeData = await response.json();
+            addLog(`✅ Informações obtidas: ${storeData.name}`);
+            showResult('storeResult', storeData, 'success');
+          } else {
+            throw new Error(`Erro ${response.status}: ${response.statusText}`);
+          }
+        } catch (error) {
+          addLog(`❌ Erro ao obter informações da loja: ${error.message}`);
+          showResult('storeResult', `Erro: ${error.message}`, 'error');
+        }
+      }
+
+      // Mostrar configurações da API
+      function showApiConfig() {
+        const config = {
+          storeId: NUVERMSHOP_CONFIG.STORE_ID,
+          accessToken: NUVERMSHOP_CONFIG.ACCESS_TOKEN ? '***' + NUVERMSHOP_CONFIG.ACCESS_TOKEN.slice(-4) : 'Não configurado',
+          baseUrl: NUVERMSHOP_CONFIG.BASE_URL,
+          isConfigured: isApiConfigured()
+        };
+        
+        showResult('storeResult', config, 'info');
+        addLog('Configurações da API exibidas');
+      }
+
+      // Limpar log
+      function clearLog() {
+        testLog = [];
+        document.getElementById('testLog').textContent = '';
+        addLog('Log limpo');
+      }
+
+      // Exportar log
+      function exportLog() {
+        const logText = testLog.map(entry => entry.message).join('\n');
+        const blob = new Blob([logText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `api-test-log-${new Date().toISOString().slice(0, 19)}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        addLog('Log exportado');
+      }
+
+      // Inicialização
+      document.addEventListener('DOMContentLoaded', () => {
+        addLog('Página de teste carregada');
+        
+        // Verificar configuração da API
+        if (isApiConfigured()) {
+          addLog('✅ API configurada');
+          updateApiStatus(true, 'Configurada');
+        } else {
+          addLog('⚠️ API não configurada');
+          updateApiStatus(false, 'Não configurada');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -77,8 +77,29 @@ afiliados-platform/
 
 - Navegador web moderno (Chrome, Firefox, Safari, Edge)
 - Servidor web local (opcional, mas recomendado)
+- Conta na Nuvemshop com acesso à API
 
-### 2. Instalação
+### 2. Configuração da API da Nuvemshop
+
+#### **Passo 1: Obter Credenciais**
+1. Acesse [Nuvemshop Apps](https://www.tiendanube.com/apps)
+2. Crie um novo app ou use um existente
+3. Obtenha seu **Store ID** e **Access Token**
+
+#### **Passo 2: Configurar o Sistema**
+1. Abra o arquivo `js/config.js`
+2. Substitua as credenciais:
+   ```javascript
+   STORE_ID: "SEU_STORE_ID_AQUI",
+   ACCESS_TOKEN: "SEU_ACCESS_TOKEN_AQUI",
+   ```
+
+#### **Passo 3: Testar a Integração**
+1. Abra `test-api-integration.html` no navegador
+2. Clique em "Testar Conexão"
+3. Verifique se a API está funcionando
+
+### 3. Instalação
 
 #### Opção A: Scripts Automáticos (Recomendado)
 
@@ -99,6 +120,23 @@ chmod +x deploy.sh
 # Executar
 ./deploy.sh
 ```
+
+### 4. Testando com Postman
+
+Para testar a API antes de usar no sistema:
+
+1. **Instale o Postman** em [postman.com](https://postman.com)
+2. **Importe a coleção** `postman-collection.json`
+3. **Configure as variáveis:**
+   - `store_id`: Seu Store ID
+   - `access_token`: Seu Access Token
+4. **Teste os endpoints:**
+   - Teste de Conexão
+   - Listar Cupons
+   - Criar Cupom
+   - Listar Pedidos
+
+Veja o guia completo em `POSTMAN-GUIDE.md`
 
 #### Opção B: Servidor Local Manual
 
