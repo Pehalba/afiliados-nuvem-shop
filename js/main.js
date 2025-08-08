@@ -404,46 +404,48 @@ let auth, navigation, modalSystem, tableSystem;
 // Tornar auth global
 window.auth = null;
 
-// Inicializar quando DOM estiver pronto
-document.addEventListener("DOMContentLoaded", () => {
-  auth = new AuthSystem();
-  window.auth = auth; // Tornar global
-  navigation = new Navigation();
-  modalSystem = new ModalSystem();
-  tableSystem = new TableSystem();
-
-  // Configurar formulário de login se existir
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", handleLogin);
-  }
-
-  // Verificar se está na página de login
-  const isLoginPage = window.location.pathname.includes("index.html") || 
-                     window.location.pathname === "/" ||
-                     window.location.pathname.endsWith("/");
-  
-  if (isLoginPage) {
-    // Se já está logado, redirecionar apenas uma vez
-    if (auth.isLoggedIn() && !sessionStorage.getItem("redirected")) {
-      sessionStorage.setItem("redirected", "true");
-      setTimeout(() => {
-        auth.redirectToDashboard();
-      }, 100);
+  // Inicializar quando DOM estiver pronto
+  document.addEventListener("DOMContentLoaded", () => {
+    auth = new AuthSystem();
+    window.auth = auth; // Tornar global
+    
+    // Inicializar sistemas apenas se necessário
+    const isLoginPage = window.location.pathname.includes("index.html") || 
+                       window.location.pathname === "/" ||
+                       window.location.pathname.endsWith("/");
+    
+    if (isLoginPage) {
+      // Na página de login, inicializar apenas o necessário
+      const loginForm = document.getElementById("loginForm");
+      if (loginForm) {
+        loginForm.addEventListener("submit", handleLogin);
+      }
+      
+      // Se já está logado, redirecionar apenas uma vez
+      if (auth.isLoggedIn() && !sessionStorage.getItem("redirected")) {
+        sessionStorage.setItem("redirected", "true");
+        setTimeout(() => {
+          auth.redirectToDashboard();
+        }, 100);
+      }
+    } else {
+      // Nas páginas do sistema, inicializar navegação e outros sistemas
+      navigation = new Navigation();
+      modalSystem = new ModalSystem();
+      tableSystem = new TableSystem();
+      
+      // Se não está logado, redirecionar para login apenas uma vez
+      if (!auth.isLoggedIn() && !sessionStorage.getItem("login_redirected")) {
+        sessionStorage.setItem("login_redirected", "true");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 100);
+      } else if (auth.isLoggedIn()) {
+        // Se está logado, limpar flag de redirecionamento para login
+        sessionStorage.removeItem("login_redirected");
+      }
     }
-  } else {
-    // Se não está logado, redirecionar para login apenas uma vez
-    if (!auth.isLoggedIn() && !sessionStorage.getItem("login_redirected")) {
-      sessionStorage.setItem("login_redirected", "true");
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 100);
-    } else if (auth.isLoggedIn()) {
-      // Se está logado, limpar flag de redirecionamento para login
-      sessionStorage.removeItem("login_redirected");
-    }
-  }
-});
+  });
 
 // ===== HANDLERS =====
 async function handleLogin(e) {

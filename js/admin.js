@@ -20,9 +20,13 @@ class AdminPanel {
   init() {
     if (!this.initialized) {
       this.initialized = true;
+      console.log("AdminPanel: Inicializando...");
       this.loadData();
       this.setupEventListeners();
       this.loadDashboard();
+      console.log("AdminPanel: Inicialização concluída");
+    } else {
+      console.log("AdminPanel: Já inicializado, ignorando...");
     }
   }
 
@@ -691,11 +695,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("admin.html")) {
     // Aguardar um pouco para garantir que a autenticação foi verificada
     setTimeout(() => {
-      if (window.auth && window.auth.isAdmin() && !window.adminPanelInitialized) {
+      if (
+        window.auth &&
+        window.auth.isAdmin() &&
+        !window.adminPanelInitialized
+      ) {
         window.adminPanelInitialized = true;
+        console.log("Inicializando AdminPanel...");
         adminPanel = new AdminPanel();
       }
-    }, 200);
+    }, 500); // Aumentar delay para garantir que tudo foi carregado
   }
 });
 

@@ -21,9 +21,13 @@ class AffiliateDashboard {
   init() {
     if (!this.initialized) {
       this.initialized = true;
+      console.log("AffiliateDashboard: Inicializando...");
       this.loadUserData();
       this.setupEventListeners();
       this.loadDashboard();
+      console.log("AffiliateDashboard: Inicialização concluída");
+    } else {
+      console.log("AffiliateDashboard: Já inicializado, ignorando...");
     }
   }
 
@@ -596,9 +600,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       if (window.auth && window.auth.isAffiliate() && !window.dashboardInitialized) {
         window.dashboardInitialized = true;
+        console.log("Inicializando AffiliateDashboard...");
         affiliateDashboard = new AffiliateDashboard();
       }
-    }, 200);
+    }, 500); // Aumentar delay para garantir que tudo foi carregado
   }
 });
 
